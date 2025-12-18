@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id                 String  @id @default(uuid())
+  name               String
+  email              String
+  endereco           String?
+  password           String
+  stripe_customer_id String?
+
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+  subscriptions Subscription?
+  haircuts      Haircut[]
+  services      Service[]
+
+  @@map("users")
+}
+
+model Subscription {
+  id      String @id
+  status  String
+  priceId String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user_id String @unique
+  user    User   @relation(fields: [user_id], references: [id])
+
+  @@map("subscriptions")
+}
+
+model Haircut {
+  id     String  @id @default(uuid())
+  name   String
+  price  Float
+  status Boolean @default(true)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user_id  String
+  user     User      @relation(fields: [user_id], references: [id])
+  services Service[]
+
+  @@map("haircuts")
+}
+
+model Service {
+  id       String @id @default(uuid())
+  customer String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  haircut_id String
+  haircut    Haircut @relation(fields: [haircut_id], references: [id])
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id])
+
+  @@map("services")
+}
