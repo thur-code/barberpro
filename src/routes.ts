@@ -8,6 +8,7 @@ import { UpdateUserController } from "./controller/users/UpdateUserController";
 import { CreateHaircutController } from "./controller/haircut/CreateHaircutController";
 import { ListHaircutController } from "./controller/haircut/ListHaircutController";
 import { UpdateHaircutController } from "./controller/haircut/UpdateHaircutController";
+import { CheckSubscriptionController } from "./controller/haircut/CheckSubscriptionController";
 
 export const router = Router();
 
@@ -21,3 +22,8 @@ router.put("/users", isAuthenticated, new UpdateUserController().handle);
 router.post("/haircut", isAuthenticated, new CreateHaircutController().handle);
 router.get("/haircuts", isAuthenticated, new ListHaircutController().handle);
 router.put("/haircut", isAuthenticated, new UpdateHaircutController().handle);
+router.get(
+  "/haircut/check",
+  isAuthenticated,
+  new CheckSubscriptionController().handle
+);
